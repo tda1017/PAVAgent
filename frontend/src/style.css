@@ -1,0 +1,426 @@
+/* ============================================
+   Benchmark Comparison — Dual Theme (Light/Dark)
+   Inspired by pua-skill.pages.dev
+   ============================================ */
+
+/* --- Reset --- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* --- Theme Variables --- */
+:root {
+  --bg: #fafafa;
+  --bg-card: #fff;
+  --bg-hover: #f9f9f9;
+  --bg-input: #f5f5f5;
+  --text: #1a1a1a;
+  --text-secondary: #666;
+  --text-muted: #999;
+  --border: #e8e8e8;
+  --border-light: #f0f0f0;
+  --tab-bg: #fff;
+  --tab-border: #e0e0e0;
+  --tab-active-bg: #1a1a1a;
+  --tab-active-text: #fff;
+  --accent: #e67e22;
+  --best: #16a34a;
+  --error-bg: #fef2f2;
+  --error-border: #fecaca;
+  --error-text: #dc2626;
+  --differ-bg: #fef2f2;
+  --differ-text: #dc2626;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  --scrollbar-thumb: #d0d0d0;
+}
+
+[data-theme="dark"] {
+  --bg: #111;
+  --bg-card: #1a1a1a;
+  --bg-hover: #222;
+  --bg-input: #222;
+  --text: #e5e5e5;
+  --text-secondary: #a0a0a0;
+  --text-muted: #666;
+  --border: #2a2a2a;
+  --border-light: #222;
+  --tab-bg: #1a1a1a;
+  --tab-border: #333;
+  --tab-active-bg: #fff;
+  --tab-active-text: #111;
+  --accent: #f59e0b;
+  --best: #4ade80;
+  --error-bg: #2d1b1b;
+  --error-border: #5c2020;
+  --error-text: #f87171;
+  --differ-bg: #2d1b1b;
+  --differ-text: #f87171;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  --scrollbar-thumb: #444;
+}
+
+/* --- Base --- */
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* --- Scrollbar --- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 3px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+/* --- Container --- */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+
+/* --- Card --- */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  transition: box-shadow 0.2s ease, background 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow);
+}
+
+/* --- Tabs --- */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 18px;
+  border: 1px solid var(--tab-border);
+  border-radius: 999px;
+  background: var(--tab-bg);
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.tab:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+  border-color: var(--text-muted);
+}
+
+.tab.active {
+  background: var(--tab-active-bg);
+  color: var(--tab-active-text);
+  border-color: var(--tab-active-bg);
+}
+
+.tab.active:hover {
+  opacity: 0.9;
+}
+
+.tab.disabled {
+  background: var(--bg);
+  color: var(--text-muted);
+  border-color: var(--border);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* --- Score Badge --- */
+.score-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.score-green {
+  background: #22c55e;
+}
+
+.score-yellow {
+  background: #f59e0b;
+}
+
+.score-red {
+  background: #ef4444;
+}
+
+/* --- Stats Table --- */
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.stats-table th,
+.stats-table td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.stats-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stats-table tbody tr {
+  transition: background 0.15s ease;
+}
+
+.stats-table tbody tr:hover {
+  background: var(--bg-hover);
+}
+
+.stats-table .best {
+  color: var(--best);
+  font-weight: 700;
+}
+
+/* --- Collapse Header --- */
+.collapse-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 14px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+.collapse-header:hover {
+  color: var(--accent);
+}
+
+.collapse-header::after {
+  content: "\25B6";
+  font-size: 12px;
+  color: var(--text-muted);
+  transition: transform 0.25s ease;
+}
+
+.collapse-header.open::after {
+  transform: rotate(90deg);
+}
+
+/* --- Media Container --- */
+.media-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+
+.media-container img,
+.media-container video {
+  max-width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+}
+
+/* --- Nav Buttons --- */
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--bg-card);
+  color: var(--text);
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.nav-btn:hover {
+  background: var(--tab-active-bg);
+  border-color: var(--tab-active-bg);
+  color: var(--tab-active-text);
+}
+
+.nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.nav-btn:disabled:hover {
+  background: var(--bg-card);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+/* --- Label Tag --- */
+.label-tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--bg-input);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+/* --- Latency --- */
+.latency {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Utility --- */
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+h1, h2, h3, h4 {
+  color: var(--text);
+  line-height: 1.3;
+}
+
+/* --- Ground Truth comparison table --- */
+.gt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.gt-table th,
+.gt-table td {
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.gt-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.gt-table .differ {
+  background: var(--differ-bg);
+  color: var(--differ-text);
+}
+
+/* --- Error box --- */
+.error-box {
+  background: var(--error-bg);
+  border: 1px solid var(--error-border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--error-text);
+  font-size: 14px;
+}
+
+/* --- Video placeholder --- */
+.video-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  background: var(--bg-input);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* --- Result top row --- */
+.result-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+/* --- Theme Toggle --- */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+}
