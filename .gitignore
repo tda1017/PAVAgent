@@ -23,5 +23,10 @@ frontend/dist/
 # Large video sources
 src/video/
 
+# Test data (images/videos)
+tests/data/images/
+tests/data/videos/
+tests/data/sequences/
+
 # Results (large binary outputs)
 results/
