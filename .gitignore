@@ -20,5 +20,8 @@ frontend/dist/
 .vscode/
 .idea/
 
+# Large video sources
+src/video/
+
 # Results (large binary outputs)
 results/
